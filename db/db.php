@@ -1,16 +1,22 @@
 <?php
 
-$servername = "localhost";
-$username = "root";
-$password = "";
+function conectarDb()
+{
+  $servername = "localhost";
+  $username = "root";
+  $password = "";
+  $conn = '';
 
-try {
-  $conn = new PDO("mysql:host=$servername;dbname=veterinaria", $username, $password);
+  try {
+    $conn = new PDO("mysql:host=$servername;dbname=veterinaria", $username, $password);
 
-  $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+    $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
-  //echo "Connected successfully";
-  
-} catch(PDOException $e) {
-  echo "Connection failed: " . $e->getMessage();
+    return $conn;
+
+  } catch (PDOException $e) {
+    echo "Connection failed: " . $e->getMessage();
+  }
+
+  return $conn;
 }

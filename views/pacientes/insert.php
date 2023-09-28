@@ -1,82 +1,11 @@
 <?php
-include '../../db/db.php';
+require '../../controllers/PacientesController.php';
 require  '../../constantes.php';
 $css = CDN_BS_CSS;
 $js = CDN_BS_JS;
 $icons = CDN_ICONOS;
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    //Crear la ruta/directorio donde se guardara la imagen
-    $carpeta = 'imagenes';
-
-    //Separar la extension
-    $infoExtension = explode(".", $_FILES["imagenes"]["name"]);
-
-    //Extension de la imagen
-    $extension = $infoExtension[1];
-
-    $permitted_chars = '0123456789abcdefghijklmnopqrstuvwxyz';
-    //Generar nombre aleatorio de imagen
-    $aleatorio = substr(str_shuffle($permitted_chars), 0, 10);
-
-    //Crear la ruta de la imagen con la instancia a guardar
-    $imagen = $carpeta . "/" . $aleatorio . "." . $extension;
-    //imagenes/kjasnbfkjasnfkas.jpg
-
-    //Instancia de subida de imagen
-    $tmp = $_FILES["imagenes"]["tmp_name"];
-
-    if (!file_exists($carpeta)) {
-        mkdir($carpeta, 0777);
-
-        if (!move_uploaded_file($tmp, $imagen)) {
-            header('Location: index.php');
-        }
-    } else {
-        if (!move_uploaded_file($tmp, $imagen)) {
-            header('Location: index.php');
-        }
-    }
-
-    $query = "INSERT INTO tbl_pacientes 
-            (
-                nombre, 
-                enfermedades,
-                vacunas, 
-                id_raza, 
-                imagen, 
-                fecha_creacion, 
-                fecha_actualizacion,
-                creado_por,
-                actualizado_por, 
-                fecha
-            ) VALUES
-            (
-                :nombre, 
-                :enfermedades,
-                :vacunas, 
-                :id_raza, 
-                :imagen, 
-                :fecha_creacion, 
-                :fecha_actualizacion, 
-                :creado_por,
-                :actualizado_por, 
-                :fecha)";
-
-    $data = [
-        ':nombre' => 'Manchas',
-        ':enfermedades' => 'Sarna',
-        ':vacunas' => 'Rabia',
-        ':id_raza' => 1,
-        ':imagen' => $imagen,
-        ':fecha_creacion' => date('Y-m-d H:i:s'),
-        ':fecha_actualizacion' => date('Y-m-d H:i:s'),
-        ':creado_por' => 1,
-        ':actualizado_por' => 1,
-        ':fecha' => date('Y-m-d')
-    ];
-    $stmt = $conn->prepare($query);
-    $stmt->execute($data);
-    header('Location: index.php');
+    crearRegistroPaciente($_POST, $_FILES);
 }
 
 ?>
@@ -120,10 +49,38 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     <h3 class="text-white">Crear paciente</h3>
                 </div>
                 <div class="card-body">
-                    <form action="" enctype="multipart/form-data" method="post">
+                    <form action="insert.php" enctype="multipart/form-data" method="post">
                         <div class="row">
                             <div class="col-md-6 mt-2">
-                                Seleccionar imagen <input class="form-control" type="file" name="imagenes" id="imagenes">
+                                <label for="nombre"><b>Escriba el nombre del paciente:</b></label>
+                                <input class="form-control" type="text" name="nombre" id="nombre">
+                            </div>
+                            <div class="col-md-6 mt-2">
+                                <label for="enfermedades"><b>Seleccione las enfermedades:</b></label><br>
+                                <div class="form-group form-check-inline">
+                                    <input class="form-check-input" type="checkbox" name="enfermedades" id="enfermedades">
+                                    <label class="form-check-label" for="enfermedades">Sarna</label>
+                                </div>
+                                <div class="form-group form-check-inline">
+                                    <input class="form-check-input" type="checkbox" name="enfermedades" id="enfermedades">
+                                    <label class="form-check-label" for="enfermedades">Rabia</label>
+                                </div>
+                                <div class="form-group form-check-inline">
+                                    <input class="form-check-input" type="checkbox" name="enfermedades" id="enfermedades">
+                                    <label class="form-check-label" for="enfermedades">Gripe</label>
+                                </div> 
+                                <div class="form-group form-check-inline">
+                                    <input class="form-check-input" type="checkbox" name="enfermedades" id="enfermedades">
+                                    <label class="form-check-label" for="enfermedades">Jiote</label>
+                                </div>
+                                <div class="form-group form-check-inline">
+                                    <input class="form-check-input" type="checkbox" name="enfermedades" id="enfermedades">
+                                    <label class="form-check-label" for="enfermedades">Ninguna</label>
+                                </div>
+                            </div>
+                            <div class="col-md-6 mt-2">
+                                <label for="imagenes"><b>Seleccionar imagen</b></label>
+                                <input class="form-control" type="file" name="imagenes" id="imagenes">
                             </div>
                             <div class="col-md-12 mt-2">
                                 <button class="btn btn-primary" type="submit">Enviar</button>

@@ -1,14 +1,11 @@
 <?php
-include '../../db/db.php';
+require '../../controllers/PacientesController.php';
 require  '../../constantes.php';
-$css = CDN_BS_CSS;
-$js = CDN_BS_JS;
-$icons = CDN_ICONOS;
 
-$query = "SELECT * from tbl_pacientes";
-$smt = $conn->prepare($query);
-$smt->execute();
-$data = $smt->fetchAll(PDO::FETCH_OBJ);
+$data = obtenerPacientes();
+if($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['id_paciente_eliminar'])){
+    borrarPaciente($_POST['id_paciente_eliminar']);
+}
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -18,8 +15,8 @@ $data = $smt->fetchAll(PDO::FETCH_OBJ);
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Pacientes</title>
-    <?= $css ?>
-    <?= $icons ?>
+    <?= CDN_BS_CSS ?>
+    <?= CDN_ICONOS ?>
 </head>
 
 <body>
@@ -74,8 +71,20 @@ $data = $smt->fetchAll(PDO::FETCH_OBJ);
                                     <td><?= $paciente->vacunas ?></td>
                                     <td><?= $paciente->enfermedades ?></td>
                                     <td><?= $paciente->fecha ?></td>
-                                    <th><img src="<?= $paciente->imagen?>" class="img-fluid img-thumbnail" width="150px" height="150px"></th>
-                                    <td><i class="fas fa-trash"></i><i class="fas fa-pencil"></i></td>
+                                    <td class="text-center"><img src="<?= $paciente->imagen ?>" class="img-fluid img-thumbnail" width="150px" height="150px"></td>
+                                    <td>
+                                        <div class="col-md-12 d-flex justify-content-around">
+                                            <form action="index.php" method="post" id="form-borrar-paciente-<?= $paciente->id_paciente ?>">
+                                                <input type="hidden" name="id_paciente_eliminar" value="<?= $paciente->id_paciente ?>">
+                                                <button class="btn btn-danger" id="borrar-paciente" data-id="<?= $paciente->id_paciente ?>"><i class="fas fa-trash"></i></button>
+                                            </form>
+                                            <form action="index.php" method="post" id="form-actualizar-paciente-<?= $paciente->id_paciente ?>">
+                                                <input type="hidden" name="id_paciente_actualizar" value="<?= $paciente->id_paciente ?>">
+                                                <button class="btn btn-warning" id="actualizar-paciente" data-id="<?= $paciente->id_paciente ?>"><i class="fas fa-pencil"></i></button>
+                                            </form>
+
+                                        </div>
+                                    </td>
                                 </tr>
                             <?php
                             }
@@ -86,7 +95,31 @@ $data = $smt->fetchAll(PDO::FETCH_OBJ);
             </div>
         </div>
     </div>
-    <?= $js ?>
+
 </body>
+<?= CDN_BS_JS ?>
+<?= CDN_SWEETALERT ?>
+<script>
+    let botonesBorrar = document.querySelectorAll('#borrar-paciente');
+    let botonesActualizar = document.querySelectorAll('#actualizar-paciente');
+
+    botonesBorrar.forEach((item) => {
+        item.addEventListener('click', (e) => {
+            e.preventDefault()
+            Swal.fire({
+                title: 'Estas seguro de eliminar este registro?',
+                showCancelButton: true,
+                icon: 'error',
+                confirmButtonText: 'Continuar',
+                cancelButtonText: `Cancelar`,
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    let form = document.getElementById(`form-borrar-paciente-${item.dataset.id}`)
+                    form.submit();
+                }
+            })
+        })
+    })
+</script>
 
 </html>

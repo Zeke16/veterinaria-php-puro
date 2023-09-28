@@ -1,15 +1,11 @@
 <?php
-require '../../db/db.php';
+require '../../controllers/RazasController.php';
 require '../../constantes.php';
 $css = CDN_BS_CSS;
 $js = CDN_BS_JS;
 $icons = CDN_ICONOS;
 
-$query = "SELECT tbl_especies.nombre as especie, tbl_razas.nombre, tbl_razas.estado, tbl_razas.fecha 
-FROM tbl_razas INNER JOIN tbl_especies ON tbl_especies.id_especie = tbl_razas.id_especie";
-$ejecutar = $conn->prepare($query);
-$ejecutar->execute();
-$data = $ejecutar->fetchAll(PDO::FETCH_OBJ);
+$data = obtenerRazas();
 ?>
 
 <!DOCTYPE html>
@@ -50,7 +46,7 @@ $data = $ejecutar->fetchAll(PDO::FETCH_OBJ);
             <h1>Listado de razas</h1>
         </div>
         <div class="col-md-1 text-right">
-            <a href="" target="_blank" class=" btn btn-primary text-center">Crear &nbsp; <i class="fas fa-plus"></i></a>
+            <a href="" class=" btn btn-primary text-center">Crear &nbsp; <i class="fas fa-plus"></i></a>
         </div>
         <div class="col-md-12">
             <div class="card">
