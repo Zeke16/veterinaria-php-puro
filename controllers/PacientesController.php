@@ -14,7 +14,7 @@ function obtenerPacientes()
 function crearRegistroPaciente($post, $files)
 {
     $imagen = guardarImagen($files);
-    
+
     $query = "INSERT INTO tbl_pacientes 
     (
         nombre, enfermedades, vacunas, id_raza, imagen, fecha_creacion, 
@@ -59,18 +59,29 @@ function guardarImagen($files)
             header('Location: index.php');
         }
     }
-    
+
     return $imagen;
 }
 
-function obtenerRazas(){
-
-}
-
-function borrarPaciente($id){
-    $query = "DELETE FROM tbl_pacientes WHERE id_paciente = :id_paciente";
-    $stmt = conectarDb()->prepare($query);
-    $data = [':id_paciente' => $id];
-    $stmt->execute($data);
-    header('Location: index.php');
+function borrarPaciente($id)
+{
+    try {
+        $query = "DELETE FROM tbl_pacientes WHERE id_paciente = :id_paciente";
+        $stmt = conectarDb()->prepare($query);
+        $data = [':id_paciente' => $id];
+        $stmt->execute($data);
+        header('Location: index.php');
+    } catch (PDOException $e) {
+        $_SESSION['error'] = "error";
+        $_SESSION['error-message'] = "<script>
+        Swal.fire({
+            title: 'Error',
+            text: '" . $e->getMessage() . "',
+            showCancelButton: true,
+            icon: 'error',
+            confirmButtonText: 'Continuar',
+            cancelButtonText: `Cancelar`,
+        })
+    </script>";
+    }
 }

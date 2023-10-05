@@ -1,11 +1,14 @@
 <?php
 require '../../controllers/EspeciesController.php';
 require '../../constantes.php';
-$css = CDN_BS_CSS;
-$js = CDN_BS_JS;
-$icons = CDN_ICONOS;
-
 $data = obtenerEspecies();
+if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['id_especie_eliminar'])) {
+    borrarEspecie($_POST['id_especie_eliminar']);
+}
+
+if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['id_especie'])) {
+    header('Location: editar.php?id_especie=' . $_POST['id_especie']);
+}
 ?>
 
 <!DOCTYPE html>
@@ -16,8 +19,8 @@ $data = obtenerEspecies();
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Especies</title>
-    <?= $css ?>
-    <?= $icons ?>
+    <?= CDN_BS_CSS ?>
+    <?= CDN_ICONOS ?>
 </head>
 
 <body>
@@ -46,7 +49,7 @@ $data = obtenerEspecies();
             <h1>Listado de especies</h1>
         </div>
         <div class="col-md-1 text-right">
-            <a href="" class=" btn btn-primary text-center">Crear &nbsp; <i class="fas fa-plus"></i></a>
+            <a href="insert.php" class=" btn btn-primary text-center">Crear &nbsp; <i class="fas fa-plus"></i></a>
         </div>
         <div class="col-md-12">
             <div class="card">
@@ -55,7 +58,7 @@ $data = obtenerEspecies();
                 </div>
                 <div class="card-body p-0">
                     <table class="table table-bordered table-stripped">
-                        <thead class="thead-dark">
+                        <thead class="thead-dark text-center">
                             <th>Nombre: </th>
                             <th>Estado: </th>
                             <th>Fecha creacion: </th>
@@ -67,9 +70,25 @@ $data = obtenerEspecies();
                             ?>
                                 <tr>
                                     <td><?= $especie->nombre ?></td>
-                                    <td><?= $especie->estado ?></td>
+                                    <td class="text-white text-center">
+                                        <span class="p-2 badge bg-<?= $especie->estado == 1 ? "success" : "danger"; ?>">
+                                            <?= $especie->estado == 1 ? "Activo" : "Inactivo"; ?>
+                                        </span>
+                                    </td>
                                     <td><?= $especie->fecha ?></td>
-                                    <td><i class="fas fa-trash"></i><i class="fas fa-pencil"></i></td>
+                                    <td>
+                                        <div class="col-md-12 d-flex justify-content-around">
+                                            <form action="index.php" method="post" id="form-borrar-especie-<?= $especie->id_especie ?>">
+                                                <input type="hidden" name="id_especie_eliminar" value="<?= $especie->id_especie ?>">
+                                                <button class="btn btn-danger" id="borrar-especie" data-id="<?= $especie->id_especie ?>"><i class="fas fa-trash"></i></button>
+                                            </form>
+                                            <form action="index.php" method="post">
+                                                <input type="hidden" name="id_especie" value="<?= $especie->id_especie ?>">
+                                                <button class="btn btn-warning"><i class="fas fa-pencil"></i></button>
+                                            </form>
+
+                                        </div>
+                                    </td>
                                 </tr>
                             <?php
                             }
@@ -80,7 +99,37 @@ $data = obtenerEspecies();
             </div>
         </div>
     </div>
-    <?= $js ?>
 </body>
+<?= CDN_BS_JS ?>
+<?= CDN_SWEETALERT ?>
+<?php
+if (isset($_SESSION['error'])) {
+    echo $_SESSION['error-message'];
+    unset($_SESSION['error']);
+    unset($_SESSION['error-message']);
+}
+?>
+<script>
+    let botonesBorrar = document.querySelectorAll('#borrar-especie');
+    let botonesActualizar = document.querySelectorAll('#actualizar-especie');
+
+    botonesBorrar.forEach((item) => {
+        item.addEventListener('click', (e) => {
+            e.preventDefault()
+            Swal.fire({
+                title: 'Estas seguro de eliminar este registro?',
+                showCancelButton: true,
+                icon: 'error',
+                confirmButtonText: 'Continuar',
+                cancelButtonText: `Cancelar`,
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    let form = document.getElementById(`form-borrar-especie-${item.dataset.id}`)
+                    form.submit();
+                }
+            })
+        })
+    })
+</script>
 
 </html>

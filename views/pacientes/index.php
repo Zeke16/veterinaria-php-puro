@@ -54,10 +54,11 @@ if($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['id_paciente_eliminar'])
                 </div>
                 <div class="card-body p-0">
                     <table class="table table-bordered table-stripped">
-                        <thead class="thead-dark">
+                        <thead class="thead-dark text-center">
                             <th>Nombre: </th>
                             <th>Vacunas: </th>
                             <th>Enfermedades: </th>
+                            <th>Estado</th>
                             <th>Fecha creacion: </th>
                             <th>Imagen</th>
                             <th>Acciones</th>
@@ -70,6 +71,11 @@ if($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['id_paciente_eliminar'])
                                     <td><?= $paciente->nombre ?></td>
                                     <td><?= $paciente->vacunas ?></td>
                                     <td><?= $paciente->enfermedades ?></td>
+                                    <td class="text-white text-center">
+                                        <span class="p-2 badge bg-<?= $paciente->estado == 1 ? "success" : "danger"; ?>">
+                                            <?= $paciente->estado == 1 ? "Activo" : "Inactivo"; ?>
+                                        </span>
+                                    </td>
                                     <td><?= $paciente->fecha ?></td>
                                     <td class="text-center"><img src="<?= $paciente->imagen ?>" class="img-fluid img-thumbnail" width="150px" height="150px"></td>
                                     <td>
@@ -78,9 +84,9 @@ if($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['id_paciente_eliminar'])
                                                 <input type="hidden" name="id_paciente_eliminar" value="<?= $paciente->id_paciente ?>">
                                                 <button class="btn btn-danger" id="borrar-paciente" data-id="<?= $paciente->id_paciente ?>"><i class="fas fa-trash"></i></button>
                                             </form>
-                                            <form action="index.php" method="post" id="form-actualizar-paciente-<?= $paciente->id_paciente ?>">
+                                            <form action="index.php" method="post">
                                                 <input type="hidden" name="id_paciente_actualizar" value="<?= $paciente->id_paciente ?>">
-                                                <button class="btn btn-warning" id="actualizar-paciente" data-id="<?= $paciente->id_paciente ?>"><i class="fas fa-pencil"></i></button>
+                                                <button class="btn btn-warning"><i class="fas fa-pencil"></i></button>
                                             </form>
 
                                         </div>
