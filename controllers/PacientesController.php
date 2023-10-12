@@ -11,8 +11,36 @@ function obtenerPacientes()
     return $data;
 }
 
+function obtenerRazas()
+{
+    $query = "SELECT tbl_especies.nombre as especie, tbl_razas.id_raza, tbl_razas.nombre, tbl_razas.estado, tbl_razas.fecha 
+    FROM tbl_razas INNER JOIN tbl_especies ON tbl_especies.id_especie = tbl_razas.id_especie";
+    $ejecutar = conectarDb()->prepare($query);
+    $ejecutar->execute();
+    $data = $ejecutar->fetchAll(PDO::FETCH_OBJ);
+
+    return $data;
+}
+
 function crearRegistroPaciente($post, $files)
 {
+    $enfermedadesString = '';
+    $vacunasString = '';
+    foreach ($post['enfermedades'] as $index => $enfermedad) {
+        if ($index == (count($post['enfermedades'])  - 1)) {
+            $enfermedadesString .= $enfermedad;
+            continue;
+        }
+        $enfermedadesString .= $enfermedad . ", ";
+    }
+
+    foreach ($post['vacunas'] as $index => $vacuna) {
+        if ($index == (count($post['vacunas'])  - 1)) {
+            $vacunasString .= $vacuna;
+            continue;
+        }
+        $vacunasString .= $vacuna . ", ";
+    }
     $imagen = guardarImagen($files);
 
     $query = "INSERT INTO tbl_pacientes 
@@ -25,7 +53,7 @@ function crearRegistroPaciente($post, $files)
         :fecha_actualizacion, :creado_por, :actualizado_por, :fecha)";
 
     $data = [
-        ':nombre' => $post['nombre'], ':enfermedades' => $post['enfermedades'], ':vacunas' => $post['vacunas'],
+        ':nombre' => $post['nombre'], ':enfermedades' => $enfermedadesString, ':vacunas' => $vacunasString,
         ':id_raza' => $post['id_raza'], ':imagen' => $imagen, ':fecha_creacion' => date('Y-m-d H:i:s'),
         ':fecha_actualizacion' => date('Y-m-d H:i:s'), ':creado_por' => 1,
         ':actualizado_por' => 1, ':fecha' => date('Y-m-d')

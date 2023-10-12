@@ -4,6 +4,8 @@ require  '../../constantes.php';
 $css = CDN_BS_CSS;
 $js = CDN_BS_JS;
 $icons = CDN_ICONOS;
+
+$data = obtenerRazas();
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     crearRegistroPaciente($_POST, $_FILES);
 }
@@ -53,34 +55,66 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                         <div class="row">
                             <div class="col-md-6 mt-2">
                                 <label for="nombre"><b>Escriba el nombre del paciente:</b></label>
-                                <input class="form-control" type="text" name="nombre" id="nombre">
+                                <input required class="form-control" type="text" name="nombre" id="nombre">
                             </div>
                             <div class="col-md-6 mt-2">
                                 <label for="enfermedades"><b>Seleccione las enfermedades:</b></label><br>
                                 <div class="form-group form-check-inline">
-                                    <input class="form-check-input" type="checkbox" name="enfermedades" id="enfermedades">
+                                    <input required class="form-check-input" value="Sarna" type="checkbox" name="enfermedades[]" id="enfermedades">
                                     <label class="form-check-label" for="enfermedades">Sarna</label>
                                 </div>
                                 <div class="form-group form-check-inline">
-                                    <input class="form-check-input" type="checkbox" name="enfermedades" id="enfermedades">
+                                    <input class="form-check-input" value="Rabia" type="checkbox" name="enfermedades[]" id="enfermedades">
                                     <label class="form-check-label" for="enfermedades">Rabia</label>
                                 </div>
                                 <div class="form-group form-check-inline">
-                                    <input class="form-check-input" type="checkbox" name="enfermedades" id="enfermedades">
+                                    <input class="form-check-input" value="Gripe" type="checkbox" name="enfermedades[]" id="enfermedades">
                                     <label class="form-check-label" for="enfermedades">Gripe</label>
-                                </div> 
+                                </div>
                                 <div class="form-group form-check-inline">
-                                    <input class="form-check-input" type="checkbox" name="enfermedades" id="enfermedades">
+                                    <input class="form-check-input" value="Jiote" type="checkbox" name="enfermedades[]" id="enfermedades">
                                     <label class="form-check-label" for="enfermedades">Jiote</label>
                                 </div>
                                 <div class="form-group form-check-inline">
-                                    <input class="form-check-input" type="checkbox" name="enfermedades" id="enfermedades">
+                                    <input class="form-check-input" value="Ninguna" type="checkbox" name="enfermedades[]" id="enfermedades">
                                     <label class="form-check-label" for="enfermedades">Ninguna</label>
                                 </div>
                             </div>
                             <div class="col-md-6 mt-2">
+                                <label for="vacunas"><b>Seleccione las vacunas:</b></label><br>
+                                <div class="form-group form-check-inline">
+                                    <input class="form-check-input" value="Sarna" type="checkbox" name="vacunas[]" id="vacunas">
+                                    <label class="form-check-label" for="vacunas">Sarna</label>
+                                </div>
+                                <div class="form-group form-check-inline">
+                                    <input class="form-check-input" value="Rabia" type="checkbox" name="vacunas[]" id="vacunas">
+                                    <label class="form-check-label" for="vacunas">Rabia</label>
+                                </div>
+                                <div class="form-group form-check-inline">
+                                    <input class="form-check-input" value="Gripe" type="checkbox" name="vacunas[]" id="vacunas">
+                                    <label class="form-check-label" for="vacunas">Gripe</label>
+                                </div>
+                                <div class="form-group form-check-inline">
+                                    <input class="form-check-input" value="Jiote" type="checkbox" name="vacunas[]" id="vacunas">
+                                    <label class="form-check-label" for="vacunas">Jiote</label>
+                                </div>
+                                <div class="form-group form-check-inline">
+                                    <input class="form-check-input" value="Ninguna" type="checkbox" name="vacunas[]" id="vacunas">
+                                    <label class="form-check-label" for="vacunas">Ninguna</label>
+                                </div>
+                            </div>
+                            <div class="col-md-6 mt-2">
+                                <label for="nombre"><b>Seleccione la raza:</b></label>
+                                <select required name="id_raza" required class="form-control">
+                                    <option value="" disabled selected>-- Seleccione la raza --</option>
+                                    <?php foreach ($data as $raza) { ?>
+                                        <option value="<?= $raza->id_raza ?>"><?= $raza->nombre ?></option>
+                                    <?php } ?>
+                                </select>
+                            </div>
+                            <div class="col-md-6 mt-2">
                                 <label for="imagenes"><b>Seleccionar imagen</b></label>
-                                <input class="form-control" type="file" name="imagenes" id="imagenes">
+                                <input required class="form-control" type="file" name="imagenes" id="imagenes">
                             </div>
                             <div class="col-md-12 mt-2">
                                 <button class="btn btn-primary" type="submit">Enviar</button>
