@@ -1,11 +1,11 @@
 -- phpMyAdmin SQL Dump
--- version 5.2.0
+-- version 5.1.1
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 22-09-2023 a las 06:56:47
--- Versión del servidor: 10.4.25-MariaDB
--- Versión de PHP: 7.4.30
+-- Tiempo de generación: 12-10-2023 a las 22:13:24
+-- Versión del servidor: 10.4.22-MariaDB
+-- Versión de PHP: 8.1.2
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -59,6 +59,7 @@ CREATE TABLE `tbl_pacientes` (
   `vacunas` text NOT NULL,
   `id_raza` int(11) NOT NULL,
   `imagen` text NOT NULL,
+  `estado` int(11) NOT NULL,
   `fecha` date NOT NULL,
   `fecha_creacion` datetime NOT NULL,
   `fecha_actualizacion` datetime NOT NULL,
@@ -70,10 +71,10 @@ CREATE TABLE `tbl_pacientes` (
 -- Volcado de datos para la tabla `tbl_pacientes`
 --
 
-INSERT INTO `tbl_pacientes` (`id_paciente`, `nombre`, `enfermedades`, `vacunas`, `id_raza`, `imagen`, `fecha`, `fecha_creacion`, `fecha_actualizacion`, `creado_por`, `actualizado_por`) VALUES
-(1, 'Manchas', 'Ninguna', 'Antirrábica, parásitos, pulgas', 1, 'imagenes/asfbiha2sd.jpg', '2022-12-20', '2023-09-22 05:45:51', '2023-09-22 05:45:51', 2, 2),
-(2, 'Sr gato', 'Moquillo, Sida felino, Sarna', 'Ninguna', 4, 'imagenes/asfbiha2sd.jpg', '2023-09-21', '2023-09-22 05:45:51', '2023-09-22 05:45:51', 2, 2),
-(3, 'Manchas', 'Sarna', 'Rabia', 1, 'imagenes/dkrqn6l8mw.ico', '2023-09-22', '2023-09-22 06:55:09', '2023-09-22 06:55:09', 1, 1);
+INSERT INTO `tbl_pacientes` (`id_paciente`, `nombre`, `enfermedades`, `vacunas`, `id_raza`, `imagen`, `estado`, `fecha`, `fecha_creacion`, `fecha_actualizacion`, `creado_por`, `actualizado_por`) VALUES
+(1, 'Manchas', 'Ninguna', 'Antirrábica, parásitos, pulgas', 1, 'imagenes/asfbiha2sd.jpg', 0, '2022-12-20', '2023-09-22 05:45:51', '2023-09-22 05:45:51', 2, 2),
+(2, 'Sr gato', 'Moquillo, Sida felino, Sarna', 'Ninguna', 4, 'imagenes/asfbiha2sd.jpg', 0, '2023-09-21', '2023-09-22 05:45:51', '2023-09-22 05:45:51', 2, 2),
+(3, 'Manchas', 'Sarna', 'Rabia', 1, 'imagenes/dkrqn6l8mw.ico', 0, '2023-09-22', '2023-09-22 06:55:09', '2023-09-22 06:55:09', 1, 1);
 
 -- --------------------------------------------------------
 
@@ -201,7 +202,7 @@ ALTER TABLE `tbl_especies`
 -- AUTO_INCREMENT de la tabla `tbl_pacientes`
 --
 ALTER TABLE `tbl_pacientes`
-  MODIFY `id_paciente` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id_paciente` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT de la tabla `tbl_razas`
